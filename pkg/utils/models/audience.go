@@ -9,6 +9,7 @@ type UserSignup struct {
 	Name            string `json:"name"`
 	UserName        string `json:"username"`
 	Email           string `json:"email"`
+	Phone           string `json:"phone"`
 	Password        string `json:"password"`
 	ConfirmPassword string `json:"confirm_password"`
 }
