@@ -34,3 +34,19 @@ func (b *BandHandler) BandSignupHandler(c *fiber.Ctx) error {
 	c.Status(http.StatusOK).JSON(successRes)
 	return nil
 }
+
+func (b *BandHandler) BandLoginHandler(c *fiber.Ctx) error {
+	var bandLoginDetails models.BandLogin
+	if err := c.BodyParser(&bandLoginDetails); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
+		return c.Status(http.StatusBadRequest).JSON(errRes)
+	}
+	loginDetails, err := b.BandUsecase.BandUserLogin(bandLoginDetails)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "login failed", nil, err.Error())
+		return c.Status(http.StatusBadRequest).JSON(errRes)
+	}
+	successRes := response.ClientResponse(http.StatusOK, "login successfully", loginDetails, nil)
+	c.Status(http.StatusOK).JSON(successRes)
+	return nil
+}
