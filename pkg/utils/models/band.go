@@ -14,6 +14,15 @@ type BandSignup struct {
 	ConfirmPassword string `json:"confirm_password"`
 }
 
+type BandUserSignupResponse struct {
+	Id       int    `json:"id"`
+	UserName string `json:"username"`
+	Name     string `json:"name"`
+	Email    string `json:"email" validate:"email"`
+	Phone    string `json:"phone"`
+	Password string `json:"password"`
+}
+
 type BandLoginResponse struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
