@@ -7,7 +7,6 @@ import (
 	"github.com/Anandhu4456/band-meet/pkg/repository/interfaces"
 	services "github.com/Anandhu4456/band-meet/pkg/usecase/interfaces"
 	"github.com/Anandhu4456/band-meet/pkg/utils/models"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type BandUsecase struct {
@@ -35,10 +34,19 @@ func (b *BandUsecase) BandUserSignup(user models.BandSignup) (models.BandToken, 
 	}
 	// set the hashed pass
 	user.Password = hashedPass
-	
-	bandLoginResponse,err:=b.BandRepo.BandSignup(user)
-	if err!=nil{
-		return models.BandToken{},err
+
+	bandLoginResponse, err := b.BandRepo.BandSignup(user)
+	if err != nil {
+		return models.BandToken{}, err
 	}
 	// generate token for band user
+	token, refreshtoken, err := helper.GenerateBandUserToken(bandLoginResponse)
+	if err != nil {
+		return models.BandToken{}, err
+	}
+	return models.BandToken{
+		Band:         bandLoginResponse,
+		Token:        token,
+		RefreshToken: refreshtoken,
+	}, nil
 }
