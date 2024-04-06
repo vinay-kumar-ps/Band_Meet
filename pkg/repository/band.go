@@ -24,3 +24,12 @@ func (b *BandRepo) BandSignup(bandSignup models.BandSignup) (models.BandLoginRes
 	}
 	return bandLoginResponse, nil
 }
+
+func (b *BandRepo)BandUserAvailability(email string)bool{
+	var bandUserCount int
+	err:=b.DB.Raw("SELECT COUNT(*)FROM band_profile WHERE email=?",email).Scan(&bandUserCount).Error
+	if err!=nil{
+		return false
+	}
+	return bandUserCount >0
+}
