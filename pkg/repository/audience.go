@@ -21,4 +21,22 @@ func (u *UserRepo) UserSignup( userSignup models.UserSignup) (models.UserLoginRe
 		return models.UserLoginResponse{},err
 	}
 	return userLoginResponse,nil
+
+}
+
+func(u *UserRepo) UserAvailability(email string) bool {
+	var userCount int
+	err :=u.DB.Raw("SELECT COUNT(*)FROM users WHERE email=?",email).Scan(&userCount).Error
+   if err !=nil{
+	return false
+   }
+   return userCount > 0
+}
+func (u *UserRepo) UserDetails(email string) (models.UserSignupResponse,error){
+	var  userSignupResponse models.UserSignupResponse
+	err :=u.DB.Raw("SELECT FROM users WHERE email=?",email).Scan(&userSignupResponse).Error
+	if err !=nil{
+		return models.UserSignupResponse{},err
+	}
+	return userSignupResponse,nil
 }
